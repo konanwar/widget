@@ -39,5 +39,5 @@ def get_mask_account(account: str) -> str:
 
 # card_number= input()
 # account = input()
-#print(get_mask_card_number("1234567890123456"))
-#print(get_mask_account("123456789012"))
+# print(get_mask_card_number("1234567890123456"))
+# print(get_mask_account("123456789012"))
