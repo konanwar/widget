@@ -20,10 +20,19 @@ def mask_account_card(input_string: str) -> str:
       print(identifier, get_mask_card_number(_digits))
 
 def get_date(input_data: str)-> str:
+    """передает в требуемом формате дату по заданию"""
     dt = datetime.strptime(input_data, "%Y-%m-%dT%H:%M:%S.%f")
-    print(dt.strftime("%d.%m.%Y"))  # 11.03.2024
+    print(dt.strftime("%d.%m.%Y"))
+
+def get_date_now(input_data: str)-> str:
+    """передает  дату ввода реквизитов"""
+    dt = datetime.strptime(input_data, "%Y-%m-%d %H:%M:%S.%f")
+    print(dt.strftime("%d.%m.%Y"))
 
 input_string = str(input('ведите реквизиты'))
 input_data = str(input('введите дату'))
 mask_account_card(input_string)
+input_data_now = str(datetime.now())
 get_date(input_data)
+get_date_now(input_data)
+# print(input_data)
