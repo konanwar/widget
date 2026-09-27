@@ -11,7 +11,7 @@ git clone https://github.com/konanwar/widget.git
 ```
 2. Установите зависимости:
 ```
-pip install -r 
+pip install 
 ```
 ## Структура проекта:
 Проект состоит из  3 модулей:
