@@ -1,7 +1,7 @@
 from typing import Any, Dict, List
 
 
-def filter_by_state(records: List[Dict[str, Any]], state="EXECUTED") -> List[Dict[str, Any]]:
+def filter_by_state(records: List[Dict[str, Any]], state: str = "EXECUTED") -> List[Dict[str, Any]]:
     """функуия возвращает новый список словарей по ключу 'state'"""
     filter_records = []
     for operation in records:
@@ -12,7 +12,7 @@ def filter_by_state(records: List[Dict[str, Any]], state="EXECUTED") -> List[Dic
 
 def sort_by_date(records: List[Dict[str, Any]], sort_flag: bool = True) -> List[Dict[str, Any]]:
     """Функция возвращает новый список, отсортированный по дате"""
-    return sorted(records, key=lambda d: d.get("date"), reverse=sort_flag)
+    return sorted(records, key=lambda d: d.get("date",''), reverse=sort_flag)
 
 
 sort_flag = None  # направление сортировки
