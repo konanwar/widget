@@ -30,10 +30,10 @@ def get_date_now(input_data: str) -> str:
     return dt.strftime("%d.%m.%Y")
 
 
-input_string = str(input("ведите реквизиты"))
-input_data = str(input("введите дату"))
-print(mask_account_card(input_string))
-input_data_now = str(datetime.now())
-print(get_date(input_data))
-print(get_date_now(input_data_now))
+# input_string = str(input("ведите реквизиты"))
+# input_data = str(input("введите дату"))
+# print(mask_account_card(input_string))
+# input_data_now = str(datetime.now())
+# print(get_date(input_data))
+# print(get_date_now(input_data_now))
 # print(input_data)
