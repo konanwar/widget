@@ -12,6 +12,7 @@ def sort_by_date(records: list[dict], reverse: bool = True) -> list[dict]:
     """Сортирует список словарей по ключу date (формат ISO 8601).
 
     По умолчанию — по убыванию (reverse=True), reverse=False — по возрастанию.
+    :rtype: list[dict]
     """
     if not isinstance(records, list):
         raise TypeError("Ожидается список словарей")

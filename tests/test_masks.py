@@ -1,5 +1,7 @@
 import pytest
 
+from typing import Any
+
 from src.masks import get_mask_account, get_mask_card_number
 
 
@@ -33,7 +35,7 @@ class TestGetMaskCardNumber:
         "wrong_input",
         ["", "1234", "123456789012", "12345678901234567890", "abcd12345678efgh", None],
     )
-    def test_invalid_input(self, wrong_input) -> None:
+    def test_invalid_input(self, wrong_input: Any) -> None:
         """Некорректная длина или нецифровые символы — ожидаем ошибку."""
         with pytest.raises((ValueError, TypeError)):
             get_mask_card_number(wrong_input)
@@ -57,7 +59,7 @@ class TestGetMaskAccount:
         "wrong_input",
         ["", "1234", "12345678", "736541084301358743051", "abcdefghij", None],
     )
-    def test_short_or_invalid_input(self, wrong_input) -> None:
+    def test_short_or_invalid_input(self, wrong_input: Any) -> None:
         """Номер счёта короче/длиннее 20 цифр или нецифровой — ошибка."""
         with pytest.raises((ValueError, TypeError)):
             get_mask_account(wrong_input)

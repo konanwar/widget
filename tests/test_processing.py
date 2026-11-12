@@ -1,12 +1,15 @@
 import pytest
 
+from typing import Any, cast
+
+
 from src.processing import filter_by_state, sort_by_date
 
 
 def test_filter_by_state_invalid_input() -> None:
     """Не-список на входе — TypeError."""
     with pytest.raises(TypeError):
-        filter_by_state("не список", state="EXECUTED")
+        filter_by_state(cast(list[dict], "не список"))
 
 
 class TestFilterByState:
@@ -56,11 +59,16 @@ class TestSortByDate:
         assert dates == sorted(dates)
         assert result[0]["id"] == 4  # самая старая
 
-    def test_same_dates_keep_stable(self, sample_transactions: dict) -> None:
+    def test_same_dates_keep_stable(self, sample_transactions: list[dict]) -> None:
         """При одинаковых датах исходный порядок не ломается."""
         result = sort_by_date(sample_transactions)
-        ids_same_date = [i["id"] for i in result if i["date"] == "2024-03-11T02:26:18.671407"]
-        assert ids_same_date == [6, 1, 3] or ids_same_date[:2] == sorted(ids_same_date[:2])
+
+        ids_same_date = [
+            item["id"]
+            for item in result
+             if item["date"] == "2024-03-11T02:26:18.671407"
+            ]
+        assert ids_same_date == [1, 5]
 
     def test_empty_list(self, empty_transactions: list[dict]) -> None:
         assert sort_by_date(empty_transactions) == []
@@ -69,7 +77,7 @@ class TestSortByDate:
         "wrong_item",
         [{"id": 1, "date": "не дата"}, {"id": 1}, "строка вместо словаря"],
     )
-    def test_invalid_date_formats(self, wrong_item) -> None:
+    def test_invalid_date_formats(self, wrong_item: Any) -> None:
         """Некорректная дата/структура — ожидаем ошибку."""
         with pytest.raises((ValueError, TypeError, KeyError)):
             sort_by_date([wrong_item])

@@ -1,5 +1,7 @@
 import pytest
 
+from typing import Any
+
 from src.widget import get_date, mask_account_card
 
 
@@ -29,7 +31,7 @@ class TestMaskAccountCard:
         "wrong_input",
         ["", "Visa", "Счет 12345", "7000792289606361", None],
     )
-    def test_invalid_input(self, wrong_input) -> None:
+    def test_invalid_input(self, wrong_input: Any) -> None:
         """Без типа или без номера — ожидаем ошибку."""
         with pytest.raises((ValueError, TypeError)):
             mask_account_card(wrong_input)
@@ -54,6 +56,6 @@ class TestGetDate:
         "wrong_input",
         ["", "не дата", "11.03.2024", None],
     )
-    def test_invalid_dates(self, wrong_input) -> None:
+    def test_invalid_dates(self, wrong_input: Any) -> None:
         with pytest.raises((ValueError, TypeError)):
             get_date(wrong_input)
