@@ -3,6 +3,12 @@ import pytest
 from src.processing import filter_by_state, sort_by_date
 
 
+def test_filter_by_state_invalid_input() -> None:
+    """Не-список на входе — TypeError."""
+    with pytest.raises(TypeError):
+        filter_by_state("не список", state="EXECUTED")
+
+
 class TestFilterByState:
 
     def test_filter_executed(self, sample_transactions: list[dict]) -> None:
