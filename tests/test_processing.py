@@ -1,7 +1,6 @@
-import pytest
-
 from typing import Any, cast
 
+import pytest
 
 from src.processing import filter_by_state, sort_by_date
 
