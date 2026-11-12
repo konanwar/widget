@@ -1,39 +1,52 @@
-from datetime import datetime
-
 from src.masks import get_mask_account, get_mask_card_number
 
 
-def mask_account_card(input_string: str) -> str:
-    """определяем что на входе(счет,карта)"""
-    identifier = ""
-    _digits = ""
-    for i in input_string:
-        if not i.isdigit():
-            identifier += i
-        elif i.isdigit():
-            _digits += i
-    if identifier == "Счет":
-        return identifier + get_mask_account(_digits)
+def mask_account_card(info: str) -> str:
+    """Маскирует номер карты или счёта в строке вида «Visa Platinum 7000792289606361».
+
+    Возвращает строку с замаскированным номером: «Visa Platinum 7000 79** **** 6361».
+    """
+    if not isinstance(info, str):
+        raise TypeError("Входные данные должны быть строкой")
+
+    info = info.strip()
+    if not info:
+        raise ValueError("Входная строка пуста")
+
+    # Разделяем строку на название (тип) и номер: номер — последняя «часть» из цифр
+    parts = info.rsplit(" ", 1)
+
+    if len(parts) != 2 or not parts[1].isdigit():
+        raise ValueError(f"Некорректный формат строки: {info!r}")
+
+    name, number = parts[0], parts[1]
+
+    # 20 цифр — счёт, 16 цифр — карта
+    if len(number) == 20:
+        masked_number = get_mask_account(number)
+    elif len(number) == 16:
+        masked_number = get_mask_card_number(number)
     else:
-        return identifier + get_mask_card_number(_digits)
+        raise ValueError(
+            f"Номер должен содержать 16 цифр (карта) или 20 (счёт), получено {len(number)}"
+        )
+
+    return f"{name} {masked_number}"
 
 
-def get_date(input_data: str) -> str:
-    """передает в требуемом формате дату по заданию"""
-    dt = datetime.strptime(input_data, "%Y-%m-%dT%H:%M:%S.%f")
-    return dt.strftime("%d.%m.%Y")
+def get_date(date_str: str) -> str:
+    """Преобразует дату из формата ISO 8601 («2024-03-11T02:26:18.671407») в «ДД.ММ.ГГГГ»."""
+    from datetime import datetime
 
+    if not isinstance(date_str, str):
+        raise TypeError("Дата должна быть строкой")
 
-def get_date_now(input_data: str) -> str:
-    """передает  дату ввода реквизитов"""
-    dt = datetime.strptime(input_data, "%Y-%m-%d %H:%M:%S.%f")
-    return dt.strftime("%d.%m.%Y")
+    if not date_str:
+        raise ValueError("Входная строка даты пуста")
 
+    try:
+        parsed = datetime.fromisoformat(date_str)
+    except ValueError as e:
+        raise ValueError(f"Некорректный формат даты: {date_str!r}") from e
 
-# input_string = str(input("ведите реквизиты"))
-# input_data = str(input("введите дату"))
-# print(mask_account_card(input_string))
-# input_data_now = str(datetime.now())
-# print(get_date(input_data))
-# print(get_date_now(input_data_now))
-# print(input_data)
+    return parsed.strftime("%d.%m.%Y")
