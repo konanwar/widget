@@ -1,35 +1,30 @@
-from typing import Any, Dict, List
+from datetime import datetime
 
 
-def filter_by_state(records: List[Dict[str, Any]], state: str = "EXECUTED") -> List[Dict[str, Any]]:
-    """функуия возвращает новый список словарей по ключу 'state'"""
-    filter_records = []
-    for operation in records:
-        if operation["state"] == state:
-            filter_records.append(operation)
-    return filter_records
+def filter_by_state(records: list[dict], state: str = "EXECUTED") -> list[dict]:
+    """Фильтрует список словарей по значению ключа state."""
+    if not isinstance(records, list):
+        raise TypeError("Ожидается список словарей")
+    return [item for item in records if item.get("state") == state]
 
 
-def sort_by_date(records: List[Dict[str, Any]], sort_flag: bool = True) -> List[Dict[str, Any]]:
-    """Функция возвращает новый список, отсортированный по дате"""
-    return sorted(records, key=lambda d: d.get("date",''), reverse=sort_flag)
+def sort_by_date(records: list[dict], reverse: bool = True) -> list[dict]:
+    """Сортирует список словарей по ключу date (формат ISO 8601).
 
+    По умолчанию — по убыванию (reverse=True), reverse=False — по возрастанию.
+    """
+    if not isinstance(records, list):
+        raise TypeError("Ожидается список словарей")
 
-sort_flag = None  # направление сортировки
-state = None  # статус выполнения
-records = [
-    {"id": 41428829, "state": "EXECUTED", "date": "2019-07-03T18:35:29.512364"},
-    {"id": 939719570, "state": "EXECUTED", "date": "2018-06-30T02:08:58.425572"},
-    {"id": 594226727, "state": "CANCELED", "date": "2018-09-12T21:27:25.241689"},
-    {"id": 615064591, "state": "CANCELED", "date": "2018-10-14T08:21:33.419441"},
-]
-if state is None:
-    print(filter_by_state(records))
-else:
-    print(filter_by_state(records, state))
+    # Валидация всех элементов до сортировки
+    for item in records:
+        if not isinstance(item, dict):
+            raise TypeError(f"Элемент списка должен быть словарём, получено {type(item).__name__}")
+        if "date" not in item:
+            raise KeyError("В словаре отсутствует ключ 'date'")
+        try:
+            datetime.fromisoformat(item["date"])
+        except (ValueError, TypeError) as e:
+            raise ValueError(f"Некорректная дата: {item['date']!r}") from e
 
-
-if sort_flag is None:
-    print(sort_by_date(records))
-else:
-    print(sort_by_date(records, sort_flag))
+    return sorted(records, key=lambda d: d["date"], reverse=reverse)

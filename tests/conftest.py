@@ -1,7 +1,5 @@
 import pytest
 
-import pytest
-
 
 @pytest.fixture
 def sample_transactions() -> list[dict]:
