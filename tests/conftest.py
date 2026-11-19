@@ -1,5 +1,6 @@
 import pytest
 
+
 @pytest.fixture
 def for_test_generators() -> list[dict]:
     """список словарей с раздичными валютами"""
@@ -80,7 +81,6 @@ def for_test_generators() -> list[dict]:
             "to": "Счет 14211924144426031657"
         }
     ]
-
 
 
 @pytest.fixture

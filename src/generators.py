@@ -1,34 +1,33 @@
-from typing import Iterable, Dict, Any
+from typing import Iterable, Any
+
+from collections.abc import Iterator
 
 
-def filter_by_currency(records: Iterable[dict[str, Any]], currency: str = "USD") -> Iterable[dict[str, Any]]:
+def filter_by_currency(records: Iterable[dict[str, Any]], currency: str = "USD") -> Iterator[dict[str, Any]]:
     """поочередно выдает транзакции по коду валюты """
     if not isinstance(records, list):
         raise TypeError("Ожидается список словарей")
 
     for record in records:
-        operation_amount = record.get("operationAmount",{})
-        valid_corr = operation_amount.get("currency",{})
+        operation_amount = record.get("operationAmount", {})
+        valid_corr = operation_amount.get("currency", {})
         code = valid_corr.get('code') or ''
         if code.upper() == currency.upper():
-           yield record
+            yield record
 
 
-
-def transaction_descriptions(records: list[dict]):
+def transaction_descriptions(records: list[dict]) -> Iterator[str]:
     """возвращает описание каждой операции по очереди"""
     if not isinstance(records, list):
         raise TypeError("Ожидается список словарей")
 
-
     for record in records:
         description = record.get('description')
         if description is not None:
-           yield description
+            yield description
 
 
-
-def card_number_generator(start, stop):
+def card_number_generator(start: int, stop: int) -> Iterator[str]:
     """номера банковских карт в формате XXXX XXXX XXXX XXXX"""
     if not isinstance(start, int) or isinstance(start, bool) \
             or not isinstance(stop, int) or isinstance(stop, bool):

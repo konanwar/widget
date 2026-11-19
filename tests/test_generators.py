@@ -1,7 +1,8 @@
 import pytest
-from mypy.nativeparse import expect_tag
 
-from src.generators import filter_by_currency ,transaction_descriptions ,card_number_generator
+from typing import Iterator, Any
+
+from src.generators import card_number_generator, filter_by_currency, transaction_descriptions
 
 
 def test_filter_by_currency_USD(for_test_generators: list[dict] ) -> None:
@@ -10,14 +11,13 @@ def test_filter_by_currency_USD(for_test_generators: list[dict] ) -> None:
     assert {item["id"] for item in result} == {939719570, 142264268, 895315941}
 
 
-
 def test_filter_by_currency_RUB(for_test_generators: list[dict] ) -> None:
     """ проверка на регистр"""
     result = (filter_by_currency(for_test_generators, currency='rub'))
     assert {item["id"] for item in result} == {873106923, 594226727}
 
 
-def test_filter_by_corrency_by_generators(for_test_generators):
+def test_filter_by_corrency_by_generators(for_test_generators: Iterator[dict[str, Any]]) -> None:
     """проверка генератора на поочередный вывод и соответсвие строк"""
     result = (filter_by_currency(for_test_generators, currency='rub'))
     assert next(result) == {
@@ -57,7 +57,7 @@ def test_filter_by_corrency_by_generators(for_test_generators):
 def test_filter_byby_currency_invalid_input() -> None:
     """Не-список на входе — TypeError."""
     with pytest.raises(TypeError):
-        list(filter_by_currency(list[dict], "не список"))
+        list(filter_by_currency("не список", currency="USD"))
 
 
 def test_filter_by_currency_no_matching_currency(for_test_generators) -> None:
@@ -88,13 +88,13 @@ transaction_NO_currency = {
 @pytest.mark.parametrize(
     'transaction, expected',
     [
-        ([transaction_NO_currency],[]),
-        ([],[])
+        ([transaction_NO_currency], []),
+        ([], [])
      ],
 )
-def test_filter_by_currency_no_currency(transaction,expected ):
+def test_filter_by_currency_no_currency(transaction, expected):
     """обработка на отсутвие кода валюты"""
-    assert list(filter_by_currency(transaction,currency= 'USD')) == expected
+    assert list(filter_by_currency(transaction, currency= 'USD')) == expected
 
 
 class TestDescriptions:
@@ -133,7 +133,6 @@ class TestDescriptions:
     def test_filter_by_currency_no_descriptions(self, transaction, expected):
         """обработка на пустой список, отсутвие описания перевода"""
         assert list(transaction_descriptions(transaction)) == expected
-
 
 
 class TestCardNumberGenerator:
